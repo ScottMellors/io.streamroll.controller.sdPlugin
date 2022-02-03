@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>io.streamdice PI</title>
+    <link rel="stylesheet" href="sdpi.css">
+    <script src="common.js"></script>
+</head>
+
+<body>
+    <div class="sdpi-wrapper">
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">Dice UUID</div>
+            <input class="sdpi-item-value" id="dice_uuid" type="text" value=""
+                onchange="sendValueToPlugin('uuidUpdate')">
+        </div>
+        <div class="sdpi-item" id="dice_roll_item" style="display: none;">
+            <div class="sdpi-item-label">Dice Roll Value</div>
+            <input class="sdpi-item-value" id="dice_roll_value" value="3D6"
+                onchange="sendValueToPlugin('setQuickDice')">
+        </div>
+    </div>
+
+    <script>
+        var pluginAction = null,
+            uuid = '';
+
+        if ($SD) {
+            $SD.on('connected', function (jsonObj) {
+                uuid = jsonObj['uuid'];
+                if (jsonObj.hasOwnProperty('actionInfo')) {
+                    pluginAction = jsonObj.actionInfo['action'];
+                }
+
+                var workingUUID = jsonObj.actionInfo.payload.settings.timerUUID;
+                if (workingUUID == undefined) {
+                    workingUUID = "";
+                }
+
+                //load settings
+                document.getElementById('dice_uuid').value = workingUUID;
+
+                if (pluginAction == "io.streamdice.controller.basic") {
+
+                    //Might need to be flex?
+                    document.getElementById("dice_roll_item").style.display = "block";
+
+                    //load setting
+                    var diceVal = jsonObj.actionInfo.payload.settings.diceVal;
+                    if (diceVal == undefined) {
+                        diceVal = "3D6";
+                    }
+                    document.getElementById("dice_roll_value").value = diceVal;
+                } else {
+                    //hide it
+                    document.getElementById("dice_roll_item").style.display = "none";
+                }
+            });
+        };
+
+        function sendValueToPlugin(type) {
+
+            if ($SD && $SD.connection) {
+                var payload = {};
+
+                if (type === 'setQuickDice') {
+                    payload["setQuickDice"] = document.getElementById("dice_roll_value").value;
+                } else if (pluginAction === "io.streamdice.controller.basic") {
+                    payload["setQuickDice"] = "3D6";
+                }
+
+                payload["setUUID"] = document.getElementById("dice_uuid").value;
+
+                $SD.api.sendToPlugin(uuid, pluginAction, payload);
+            }
+        }
+    </script>
+
+</body>
+
+</html>

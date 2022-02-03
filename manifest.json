@@ -1,0 +1,41 @@
+{
+    "Actions": [
+        {
+            "Icon": "pluginIcon",
+            "Name": "Quick Roll",
+            "States": [
+                {
+                    "TitleAlignment": "middle",
+                    "FontSize": "16"
+                }
+            ],
+            "SupportedInMultiActions": true,
+            "Tooltip": "Quick Roll Some Dice, set the dice to roll once this is pushed!",
+            "UUID": "io.streamdice.controller.basic"
+        }
+    ],
+    "SDKVersion": 2,
+    "Author": "GhostlyTuna",
+    "Category": "GhostlyTuna's Stream Dice",
+    "CategoryIcon": "catIcon",
+    "CodePath": "code.html",
+    "PropertyInspectorPath": "timer_pi.html",
+    "Description": "Stream dice allow you to roll dice on stream, keep a log and this app brings the tools to your fingertips!",
+    "Name": "GhostlyTuna's Stream Dice Controller",
+    "Icon": "pluginIcon",
+    "URL": "https://streamdice.io",
+    "Version": "1.0",
+    "OS": [
+        {
+            "Platform": "mac",
+            "MinimumVersion": "10.11"
+        },
+        {
+            "Platform": "windows",
+            "MinimumVersion": "10"
+        }
+    ],
+    "Software": {
+        "MinimumVersion": "4.1"
+    }
+}
