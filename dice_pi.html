@@ -33,7 +33,7 @@
                     pluginAction = jsonObj.actionInfo['action'];
                 }
 
-                var workingUUID = jsonObj.actionInfo.payload.settings.timerUUID;
+                var workingUUID = jsonObj.actionInfo.payload.settings.diceUUID || undefined;
                 if (workingUUID == undefined) {
                     workingUUID = "";
                 }
@@ -44,10 +44,10 @@
                 if (pluginAction == "io.streamdice.controller.basic") {
 
                     //Might need to be flex?
-                    document.getElementById("dice_roll_item").style.display = "block";
+                    document.getElementById("dice_roll_item").style.display = "flex";
 
                     //load setting
-                    var diceVal = jsonObj.actionInfo.payload.settings.diceVal;
+                    var diceVal = jsonObj.actionInfo.payload.settings.diceValue;
                     if (diceVal == undefined) {
                         diceVal = "3D6";
                     }

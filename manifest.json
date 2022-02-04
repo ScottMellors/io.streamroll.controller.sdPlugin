@@ -1,10 +1,11 @@
 {
     "Actions": [
         {
-            "Icon": "pluginIcon",
+            "Icon": "icons/quickIcon",
             "Name": "Quick Roll",
             "States": [
                 {
+                    "Image": "icons/pluginIcon",
                     "TitleAlignment": "middle",
                     "FontSize": "16"
                 }
@@ -17,9 +18,9 @@
     "SDKVersion": 2,
     "Author": "GhostlyTuna",
     "Category": "GhostlyTuna's Stream Dice",
-    "CategoryIcon": "catIcon",
+    "CategoryIcon": "icons/catIcon",
     "CodePath": "code.html",
-    "PropertyInspectorPath": "timer_pi.html",
+    "PropertyInspectorPath": "dice_pi.html",
     "Description": "Stream dice allow you to roll dice on stream, keep a log and this app brings the tools to your fingertips!",
     "Name": "GhostlyTuna's Stream Dice Controller",
     "Icon": "pluginIcon",

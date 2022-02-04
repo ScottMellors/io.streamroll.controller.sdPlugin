@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>io.streamtimer</title>
+    <title>io.streamdice</title>
     <meta charset="utf-8" />
 </head>
 
@@ -58,9 +58,9 @@
                     diceUUID = settings["diceUUID"];
                     diceValue = settings["diceValue"];
 
-                    var url = `http://localhost:3000/roll/${diceUUID}/${diceValue}`;
+                    var url = `http://192.168.50.190:3000/roll/${diceUUID}/${diceValue}`;
                     fetch(url, {
-                        method: "POST",
+                        method: "GET",
                         headers: {
                             "Accept": "application/json",
                             "Content-Type": "application/json"
@@ -74,7 +74,7 @@
 
             onWillAppear: function (context, settings, coordinates) {
                 if (settings != null && settings.hasOwnProperty("diceUUID") && settings.diceUUID != "") {
-                    setTitle(context, "");
+                    setTitle(context, settings.diceValue || "3D6");
                 } else {
                     //SHOW ERROR TILE
                     setTitle(context, "UUID\n MISSING");
@@ -132,8 +132,7 @@
                     }
 
                     if (jsonPayload.hasOwnProperty("setQuickDice")) {
-                        //bumpValue = jsonPayload.setQuickDice;
-                        settings.bumpVal = jsonPayload.setQuickDice;
+                        settings.diceValue = jsonPayload.setQuickDice;
 
                         setTitle(context, jsonPayload.setQuickDice);
                     }
