@@ -1,8 +1,8 @@
 {
-    "Description": "Stream dice allow you to roll dice on stream, keep a log and this app brings the tools to your fingertips!",
-    "Name": "GhostlyTuna's Stream Dice Controls",
-    "io.streamdice.controller.basic": {
+    "Description": "StreamRoll.io allows you to roll dice on stream, keep a log and this app brings the tools to your fingertips!",
+    "Name": "Streamroll.io Controller",
+    "io.streamroll.controller.basic": {
         "Name": "Quick Roll",
-        "Tooltip": "Quick Roll Some Dice, set the dice to roll once this is pushed!"
+        "Tooltip": "Quick Roll some Die, set the dice to roll once this is pushed!"
     }
 }

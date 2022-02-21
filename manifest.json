@@ -12,19 +12,19 @@
             ],
             "SupportedInMultiActions": true,
             "Tooltip": "Quick Roll Some Dice, set the dice to roll once this is pushed!",
-            "UUID": "io.streamdice.controller.basic"
+            "UUID": "io.streamroll.controller.basic"
         }
     ],
     "SDKVersion": 2,
     "Author": "GhostlyTuna",
-    "Category": "GhostlyTuna's Stream Dice",
+    "Category": "StreamRoll.io",
     "CategoryIcon": "icons/catIcon",
     "CodePath": "core.html",
     "PropertyInspectorPath": "dice_pi.html",
-    "Description": "Stream dice allow you to roll dice on stream, keep a log and this app brings the tools to your fingertips!",
-    "Name": "GhostlyTuna's Stream Dice Controller",
+    "Description": "StreamRoll.io allows you to roll dice on stream, keep a log and this app brings the tools to your fingertips!",
+    "Name": "Streamroll.io Controller",
     "Icon": "pluginIcon",
-    "URL": "https://streamdice.io",
+    "URL": "https://Streamroll.io",
     "Version": "1.0",
     "OS": [
         {

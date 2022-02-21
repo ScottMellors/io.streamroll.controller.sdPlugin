@@ -17,7 +17,7 @@ if ($SD) {
         //load settings
         document.getElementById('dice_uuid').value = workingUUID;
 
-        if (pluginAction == "io.streamdice.controller.basic") {
+        if (pluginAction == "io.streamroll.controller.basic") {
 
             //Might need to be flex?
             document.getElementById("dice_roll_item").style.display = "flex";
@@ -42,7 +42,7 @@ function sendValueToPlugin(type) {
 
         if (type === 'setQuickDice') {
             payload["setQuickDice"] = document.getElementById("dice_roll_value").value;
-        } else if (pluginAction === "io.streamdice.controller.basic") {
+        } else if (pluginAction === "io.streamroll.controller.basic") {
             payload["setQuickDice"] = "3D6";
         }
 

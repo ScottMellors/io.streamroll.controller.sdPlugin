@@ -11,7 +11,7 @@ var uuid;
 
 var quickAction = {
 
-    type: "io.streamdice.controller.basic",
+    type: "io.streamroll.controller.basic",
 
     onKeyDown: function (context, settings, coordinates, userDesiredState) {
 
@@ -25,8 +25,7 @@ var quickAction = {
             diceUUID = settings["diceUUID"];
             diceValue = settings["diceValue"];
 
-            //TODO Update this to website version later
-            var url = `http://192.168.50.190:3000/roll/${diceUUID}/${diceValue}`;
+            var url = `https://streamroll.io/roll/${diceUUID}/${diceValue}`;
             fetch(url, {
                 method: "GET",
                 headers: {
@@ -59,7 +58,7 @@ var quickAction = {
 };
 
 function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, inInfo) {
-    pluginUUID = inPluginUUID
+    pluginUUID = inPluginUUID;
 
     // Open the web socket
     websocket = new WebSocket("ws://127.0.0.1:" + inPort);
@@ -91,13 +90,13 @@ function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, in
             var settings = jsonPayload["settings"];
             var coordinates = jsonPayload["coordinates"];
             var userDesiredState = jsonPayload["userDesiredState"];
-            if (action == "io.streamdice.controller.basic") {
+            if (action == "io.streamroll.controller.basic") {
                 quickAction.onKeyUp(context, settings, coordinates, userDesiredState);
             }
         } else if (event == "willAppear") {
             settings = jsonPayload["settings"];
             var coordinates = jsonPayload["coordinates"];
-            if (action == "io.streamdice.controller.basic") {
+            if (action == "io.streamroll.controller.basic") {
                 quickAction.onWillAppear(context, settings, coordinates);
             }
         } else if (event == "sendToPlugin") {
