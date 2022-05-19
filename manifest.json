@@ -13,6 +13,34 @@
             "SupportedInMultiActions": true,
             "Tooltip": "Quick Roll Some Dice, set the dice to roll once this is pushed!",
             "UUID": "io.streamroll.controller.basic"
+        },
+        {
+            "Icon": "icons/srio_list_clear_top",
+            "Name": "Clear Last Rolled",
+            "States": [
+                {
+                    "Image": "icons/pluginIcon",
+                    "TitleAlignment": "middle",
+                    "FontSize": "16"
+                }
+            ],
+            "SupportedInMultiActions": true,
+            "Tooltip": "Want to remove the last roll off the top of the list? Push this!",
+            "UUID": "io.streamroll.controller.listClearLast"
+        },
+        {
+            "Icon": "icons/srio_list_clear",
+            "Name": "Clear List",
+            "States": [
+                {
+                    "Image": "icons/pluginIcon",
+                    "TitleAlignment": "middle",
+                    "FontSize": "16"
+                }
+            ],
+            "SupportedInMultiActions": true,
+            "Tooltip": "Want to reset your rolled list? Push this!",
+            "UUID": "io.streamroll.controller.listClearAll"
         }
     ],
     "SDKVersion": 2,
@@ -25,7 +53,7 @@
     "Name": "Streamroll.io Controller",
     "Icon": "icons/pluginIcon",
     "URL": "https://Streamroll.io",
-    "Version": "1.0",
+    "Version": "1.1",
     "OS": [
         {
             "Platform": "mac",
