@@ -1,7 +1,37 @@
 var DestinationEnum = Object.freeze({ "HARDWARE_AND_SOFTWARE": 0, "HARDWARE_ONLY": 1, "SOFTWARE_ONLY": 2 })
 
+function registerPlugin(inPluginUUID, inRegisterEvent) {
+
+    console.log(inPluginUUID + " " + inRegisterEvent);
+
+    if (websocket) {
+        var json = {
+            "event": inRegisterEvent,
+            "uuid": inPluginUUID
+        };
+
+        websocket.send(JSON.stringify(json));
+    }
+};
+
+function sendToPlugin(piUUID, action, payload) {
+    console.log(`Sending to plugin ${piUUID} ${action} ${payload}`);
+
+    if (websocket) {
+        websocket.send(
+            piUUID,
+            'sendToPlugin',
+            {
+                action: action,
+                payload: payload || {}
+            },
+            false
+        );
+    }
+}
+
 // Save global settings
-function saveGlobalSettings(context) {
+function saveGlobalSettings(context, globalSettings) {
     if (websocket) {
         const json = {
             'event': 'setGlobalSettings',
