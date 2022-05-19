@@ -1,6 +1,9 @@
 var websocket = null;
 var pluginUUID = null;
 
+let DOMAIN = "http://localhost:3000/";
+//let DOMAIN = "https://streamroll.io/";
+
 var DestinationEnum = Object.freeze({
     "HARDWARE_AND_SOFTWARE": 0,
     "HARDWARE_ONLY": 1,
@@ -25,7 +28,8 @@ var quickAction = {
             diceUUID = settings["diceUUID"];
             diceValue = settings["diceValue"];
 
-            var url = `https://streamroll.io/roll/${diceUUID}/${diceValue}`;
+            //might need to change this to POST
+            var url = `${DOMAIN}roll/${diceUUID}/${diceValue}`;
             fetch(url, {
                 method: "GET",
                 headers: {
@@ -57,24 +61,52 @@ var quickAction = {
     }
 };
 
+let clearListAction = {
+
+    type: "io.streamroll.controller.listClearAll",
+
+    onKeyUp: function (context, settings, coordinates, userDesiredState) {
+        var listUUID = "";
+
+        if (settings != null && settings.hasOwnProperty("diceUUID")) {
+            listUUID = settings["diceUUID"];
+
+            var url = `${DOMAIN}listclear/${listUUID}`;
+            fetch(url, {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                }
+            }).then(response => {
+                //get response code and alert if bad
+                let statusCode = response.status;
+
+                if (statusCode == 404) {
+                    showError(context);
+                } else if (statusCode == 500) {
+                    showError(context);
+                }
+            }).catch((reason) => {
+                showError(context);
+            });
+
+        }
+    }
+};
+
+let clearListTopAction = {};
+let globalSettings = undefined;
+
 function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, inInfo) {
     pluginUUID = inPluginUUID;
 
     // Open the web socket
     websocket = new WebSocket("ws://127.0.0.1:" + inPort);
 
-    function registerPlugin(inPluginUUID) {
-        var json = {
-            "event": inRegisterEvent,
-            "uuid": inPluginUUID
-        };
-
-        websocket.send(JSON.stringify(json));
-    };
-
     websocket.onopen = function () {
         // WebSocket is connected, send message
-        registerPlugin(pluginUUID);
+        registerPlugin(pluginUUID, inRegisterEvent);
     };
 
     websocket.onmessage = function (evt) {
@@ -95,11 +127,22 @@ function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, in
             }
         } else if (event == "willAppear") {
             settings = jsonPayload["settings"];
+
+            if (!globalSettings) {
+                requestGlobalSettings(pluginUUID);
+            }
+
             var coordinates = jsonPayload["coordinates"];
             if (action == "io.streamroll.controller.basic") {
                 quickAction.onWillAppear(context, settings, coordinates);
             }
         } else if (event == "sendToPlugin") {
+            if (jsonPayload.hasOwnProperty("setGlobalUUID")) {
+                uuid = jsonPayload.setGlobalUUID;
+                settings.diceUUID = uuid;
+                setTitle(context, settings.diceValue || "");
+            }
+
             if (jsonPayload.hasOwnProperty("setUUID")) {
                 uuid = jsonPayload.setUUID;
                 settings.diceUUID = uuid;
@@ -113,6 +156,9 @@ function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, in
             }
 
             setSettings(context, settings);
+            saveGlobalSettings(context, globalSettings);
+        } else if (event == "didReceiveGlobalSettings") {
+            globalSettings = jsonPayload.settings;
         }
     };
 
