@@ -21,7 +21,8 @@
                 {
                     "Image": "icons/pluginIcon",
                     "TitleAlignment": "middle",
-                    "FontSize": "16"
+                    "FontSize": "16",
+                    "Title": "Clear Last of List"
                 }
             ],
             "SupportedInMultiActions": true,
@@ -35,7 +36,8 @@
                 {
                     "Image": "icons/pluginIcon",
                     "TitleAlignment": "middle",
-                    "FontSize": "16"
+                    "FontSize": "16",
+                    "Title": "Clear List"
                 }
             ],
             "SupportedInMultiActions": true,

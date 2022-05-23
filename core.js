@@ -24,8 +24,8 @@ var quickAction = {
         var diceUUID = "";
         var diceValue = "3d6";
 
-        if (settings != null && settings.hasOwnProperty("diceUUID")) {
-            diceUUID = settings["diceUUID"];
+        if (settings != null && globalSettings.hasOwnProperty("diceUUID")) {
+            diceUUID = globalSettings["diceUUID"];
             diceValue = settings["diceValue"];
 
             //might need to change this to POST
@@ -48,11 +48,13 @@ var quickAction = {
             }).catch((reason) => {
                 showError(context);
             });
+        } else {
+            showError(context);
         }
     },
 
     onWillAppear: function (context, settings, coordinates) {
-        if (settings != null && settings.hasOwnProperty("diceUUID") && settings.diceUUID != "") {
+        if (settings != null && globalSettings.hasOwnProperty("diceUUID") && globalSettings.diceUUID != "") {
             setTitle(context, settings.diceValue || "3D6");
         } else {
             //SHOW ERROR TILE
@@ -137,26 +139,31 @@ function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, in
                 quickAction.onWillAppear(context, settings, coordinates);
             }
         } else if (event == "sendToPlugin") {
-            if (jsonPayload.hasOwnProperty("setGlobalUUID")) {
-                uuid = jsonPayload.setGlobalUUID;
-                settings.diceUUID = uuid;
-                setTitle(context, settings.diceValue || "");
-            }
-
-            if (jsonPayload.hasOwnProperty("setUUID")) {
-                uuid = jsonPayload.setUUID;
-                settings.diceUUID = uuid;
-                setTitle(context, "");
-            }
-
             if (jsonPayload.hasOwnProperty("setQuickDice")) {
                 settings.diceValue = jsonPayload.setQuickDice;
 
                 setTitle(context, jsonPayload.setQuickDice);
+                setSettings(context, settings);
             }
 
-            setSettings(context, settings);
-            saveGlobalSettings(context, globalSettings);
+            if (jsonPayload.hasOwnProperty("setUUID")) {
+                uuid = jsonPayload.setUUID;
+                globalSettings.diceUUID = uuid;
+                setTitle(context, settings.diceValue || "");
+
+                saveGlobalSettings(pluginUUID, globalSettings);
+            }
+
+            /*
+            if (jsonPayload.hasOwnProperty("setUUID")) {
+                uuid = jsonPayload.setUUID;
+                settings.diceUUID = uuid;
+                setTitle(context, "");
+            } */
+
+
+
+
         } else if (event == "didReceiveGlobalSettings") {
             globalSettings = jsonPayload.settings;
         }
