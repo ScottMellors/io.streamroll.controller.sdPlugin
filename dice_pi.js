@@ -34,6 +34,17 @@
 function sendValueToPlugin(type) {
     var payload = {};
 
+    console.log(document.querySelector('input[name="uuidStateRadio"]:checked').value);
+
+    if (type === "uuidUpdateState") {
+        //if state is global, replace field with global value
+        if (document.querySelector('input[name="uuidStateRadio"]:checked').value == "global") {
+            document.getElementById("dice_uuid").value = globalSettings.diceUUID;
+        } else {
+            document.getElementById("dice_uuid").value = settings.diceUUID;
+        }
+    }
+
     if (type === 'setQuickDice') {
         payload["setQuickDice"] = document.getElementById("dice_roll_value").value;
     } else if (pluginAction === "io.streamroll.controller.basic") {
@@ -41,6 +52,7 @@ function sendValueToPlugin(type) {
     }
 
     payload["setUUID"] = document.getElementById("dice_uuid").value;
+    payload["setUUIDState"] = document.querySelector('input[name="uuidStateRadio"]:checked').value
 
     const json = {
         "action": actionInfo['action'],
@@ -53,6 +65,7 @@ function sendValueToPlugin(type) {
 }
 
 let globalSettings = {};
+let settings = {};
 let actionInfo = {};
 let websocket = undefined;
 let pluginAction = undefined;
@@ -117,15 +130,21 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 
         } else if (event === "didReceiveSettings") {
             pluginAction = subJsonObj.action;
+            settings = jsonPayload.settings;
 
-            var workingUUID = globalSettings.diceUUID || undefined;
+            var workingUUID = undefined;
 
-            //load settings
+            if (jsonPayload.settings.uuidState == "local") {
+
+                document.getElementById("rdio2").checked = true;
+                workingUUID = jsonPayload.settings.diceUUID || undefined;
+            } else {
+                workingUUID = globalSettings.diceUUID || undefined;
+            }
+
             document.getElementById('dice_uuid').value = workingUUID || "";
 
             if (pluginAction == "io.streamroll.controller.basic") {
-
-                //Might need to be flex?
                 document.getElementById("dice_roll_item").style.display = "flex";
 
                 //load setting

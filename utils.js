@@ -15,8 +15,6 @@ function registerPlugin(inPluginUUID, inRegisterEvent) {
 };
 
 function sendToPlugin(piUUID, action, payload) {
-    console.log(`Sending to plugin ${piUUID} ${action}`);
-
     if (websocket) {
         websocket.send(
             piUUID,

@@ -1,8 +1,8 @@
 var websocket = null;
 var pluginUUID = null;
 
-let DOMAIN = "http://localhost:3000/";
-//let DOMAIN = "https://streamroll.io/";
+let DOMAIN = "http://localhost:3000";
+//let DOMAIN = "https://streamroll.io";
 
 var DestinationEnum = Object.freeze({
     "HARDWARE_AND_SOFTWARE": 0,
@@ -25,11 +25,17 @@ var quickAction = {
         var diceValue = "3d6";
 
         if (settings != null && globalSettings.hasOwnProperty("diceUUID")) {
-            diceUUID = globalSettings["diceUUID"];
+
+            if (settings["uuidState"] == "custom") {
+                diceUUID = settings["diceUUID"];
+            } else {
+                diceUUID = globalSettings["diceUUID"];
+            }
+
             diceValue = settings["diceValue"];
 
             //might need to change this to POST
-            var url = `${DOMAIN}roll/${diceUUID}/${diceValue}`;
+            var url = `${DOMAIN}/roll/${diceUUID}/${diceValue}`;
             fetch(url, {
                 method: "GET",
                 headers: {
@@ -54,7 +60,7 @@ var quickAction = {
     },
 
     onWillAppear: function (context, settings, coordinates) {
-        if (settings != null && globalSettings.hasOwnProperty("diceUUID") && globalSettings.diceUUID != "") {
+        if (settings != null) {
             setTitle(context, settings.diceValue || "3D6");
         } else {
             //SHOW ERROR TILE
@@ -73,7 +79,7 @@ let clearListAction = {
         if (settings != null && settings.hasOwnProperty("diceUUID")) {
             listUUID = settings["diceUUID"];
 
-            var url = `${DOMAIN}listclear/${listUUID}`;
+            var url = `${DOMAIN}/listclear/${listUUID}`;
             fetch(url, {
                 method: "GET",
                 headers: {
@@ -146,23 +152,21 @@ function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, in
                 setSettings(context, settings);
             }
 
-            if (jsonPayload.hasOwnProperty("setUUID")) {
+            if (jsonPayload.hasOwnProperty("setUUID") && jsonPayload.hasOwnProperty("setUUIDState")) {
                 uuid = jsonPayload.setUUID;
-                globalSettings.diceUUID = uuid;
-                setTitle(context, settings.diceValue || "");
 
+                settings.uuidState = jsonPayload.setUUIDState;
+
+                if (jsonPayload.setUUIDState == "global") {
+                    globalSettings.diceUUID = uuid;
+                } else {
+                    settings.diceUUID = uuid;
+                }
+
+                setSettings(context, settings);
                 saveGlobalSettings(pluginUUID, globalSettings);
+                setTitle(context, settings.diceValue || "");
             }
-
-            /*
-            if (jsonPayload.hasOwnProperty("setUUID")) {
-                uuid = jsonPayload.setUUID;
-                settings.diceUUID = uuid;
-                setTitle(context, "");
-            } */
-
-
-
 
         } else if (event == "didReceiveGlobalSettings") {
             globalSettings = jsonPayload.settings;
