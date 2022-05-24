@@ -4,5 +4,15 @@
     "io.streamroll.controller.basic": {
         "Name": "Quick Roll",
         "Tooltip": "Quick Roll some Die, set the dice to roll once this is pushed!"
+    },
+    "Localization": {
+        "PI": {
+            "DiceSetup" : "Dice Setup",
+            "Use": "Use",
+            "UUIDStatePreset" : "Preset",
+            "UUIDStateLocal" : "Local UUID",
+            "DiceUUID": "Dice UUID",
+            "DiceRollValue" : "Dice Roll Value"
+        }
     }
 }

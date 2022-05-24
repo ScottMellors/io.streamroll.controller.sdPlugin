@@ -85,7 +85,7 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
     // Retrieve language
     var language = info['application']['language'];
 
-    //PI(language); //TODO
+    PI(language);
 
     // if connection was established, the websocket sends
     // an 'onopen' event, where we need to register our PI
@@ -155,5 +155,43 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
                 document.getElementById("dice_roll_item").style.display = "none";
             }
         }
+    };
+}
+
+
+function PI(inLanguage) {
+    // Init PI
+    instance = this;
+
+    // Public localizations for the UI
+    this.localization = {};
+
+    // Load the localizations
+    getLocalization(inLanguage, function (inStatus, inLocalization) {
+        if (inStatus) {
+            // Save public localization
+            instance.localization = inLocalization['PI'];
+
+            // Localize the PI
+            instance.localize();
+        } else {
+            console.log(inLocalization);
+        }
+    });
+
+    // Localize the UI
+    this.localize = function () {
+        // Check if localizations were loaded
+        if (instance.localization == null) {
+            return;
+        }
+
+        // Localize the fields
+        document.getElementById('dice_setup_heading').innerHTML = instance.localization['DiceSetup'];
+        document.getElementById('stateRdioLabel').innerHTML = instance.localization['Use'];
+        document.getElementById('rdio1Label').innerHTML = instance.localization['UUIDStatePreset'];
+        document.getElementById('rdio2Label').innerHTML = instance.localization['UUIDStateLocal'];
+        document.getElementById('uuidLabel').innerHTML = instance.localization['DiceUUID'];
+        document.getElementById('valueLabel').innerHTML = instance.localization['DiceRollValue'];
     };
 }

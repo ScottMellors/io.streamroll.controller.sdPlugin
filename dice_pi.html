@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>io.streamroll PI</title>
+    <title>io.streamroll.controller PI</title>
     <link rel="stylesheet" href="sdpi.css">
     <script src="utils.js"></script>
     <script src="dice_pi.js"></script>
@@ -15,20 +15,20 @@
             <details class="sdpi-item-value">
                 <summary id="dice_setup_heading">Dice Setup</summary>
                 <div type="radio" class="sdpi-item" id="default_radio">
-                    <div class="sdpi-item-label">Use</div>
+                    <div class="sdpi-item-label" id="stateRdioLabel">Use</div>
                     <div class="sdpi-item-value">
                         <span class="sdpi-item-child">
                             <input id="rdio1" type="radio" value="global" name="uuidStateRadio" checked onclick="sendValueToPlugin('uuidUpdateState')">
-                            <label for="rdio1" class="sdpi-item-label"><span></span>Preset</label>
+                            <label for="rdio1" class="sdpi-item-label" id="rdio1Label"><span></span>Preset</label>
                         </span>
                         <span class="sdpi-item-child">
                             <input id="rdio2" type="radio" value="custom" name="uuidStateRadio" onclick="sendValueToPlugin('uuidUpdateState')">
-                            <label for="rdio2" class="sdpi-item-label"><span></span>Local UUID</label>
+                            <label for="rdio2" class="sdpi-item-label" id="rdio2Label"><span></span>Local UUID</label>
                         </span>
                     </div>
                 </div>
                 <div class="sdpi-item">
-                    <div class="sdpi-item-label">Dice UUID</div>
+                    <div class="sdpi-item-label" id="uuidLabel">Dice UUID</div>
                     <input class="sdpi-item-value" id="dice_uuid" type="text" value=""
                         onchange="sendValueToPlugin('uuidUpdate')">
                 </div>
@@ -36,7 +36,7 @@
         </div>
 
         <div class="sdpi-item" id="dice_roll_item" style="display: none;">
-            <div class="sdpi-item-label">Dice Roll Value</div>
+            <div class="sdpi-item-label" id="valueLabel">Dice Roll Value</div>
             <input class="sdpi-item-value" id="dice_roll_value" value="3D6"
                 onchange="sendValueToPlugin('setQuickDice')">
         </div>
