@@ -1,8 +1,6 @@
 function sendValueToPlugin(type) {
     var payload = {};
 
-    console.log(document.querySelector('input[name="uuidStateRadio"]:checked').value);
-
     if (type === "uuidUpdateState") {
         //if state is global, replace field with global value
         if (document.querySelector('input[name="uuidStateRadio"]:checked').value == "global") {

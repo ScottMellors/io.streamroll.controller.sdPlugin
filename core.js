@@ -24,7 +24,7 @@ var quickAction = {
         var diceUUID = "";
         var diceValue = "3d6";
 
-        if (settings != null && globalSettings.hasOwnProperty("diceUUID")) {
+        if (settings != undefined && globalSettings != undefined) {
 
             if (settings["uuidState"] == "custom") {
                 diceUUID = settings["diceUUID"];
@@ -70,14 +70,16 @@ var quickAction = {
 };
 
 let clearListAction = {
-
     type: "io.streamroll.controller.listClearAll",
-
     onKeyUp: function (context, settings, coordinates, userDesiredState) {
-        var listUUID = "";
-
-        if (settings != null && settings.hasOwnProperty("diceUUID")) {
-            listUUID = settings["diceUUID"];
+        if (settings != null) {
+            let listUUID;
+        
+            if (settings["uuidState"] == "custom") {
+                listUUID = settings["diceUUID"];
+            } else {
+                listUUID = globalSettings["diceUUID"];
+            }
 
             var url = `${DOMAIN}/listclear/${listUUID}`;
             fetch(url, {
@@ -99,8 +101,15 @@ let clearListAction = {
                 showError(context);
             });
 
+        } else {
+            showError(context);
         }
     }
+};
+
+let keyUpActions = {
+    "basic": quickAction,
+    "listclearall": clearListAction
 };
 
 let clearListTopAction = {};
@@ -130,8 +139,12 @@ function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, in
             var settings = jsonPayload["settings"];
             var coordinates = jsonPayload["coordinates"];
             var userDesiredState = jsonPayload["userDesiredState"];
-            if (action == "io.streamroll.controller.basic") {
-                quickAction.onKeyUp(context, settings, coordinates, userDesiredState);
+
+            //get correct variable for id
+            let actionType = action.replace("io.streamroll.controller.", "");
+            let actionObj = keyUpActions[actionType];
+            if (actionObj) {
+                actionObj.onKeyUp(context, settings, coordinates, userDesiredState);
             }
         } else if (event == "willAppear") {
             settings = jsonPayload["settings"];
