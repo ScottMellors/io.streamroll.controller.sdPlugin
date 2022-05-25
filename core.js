@@ -107,12 +107,53 @@ let clearListAction = {
     }
 };
 
-let keyUpActions = {
-    "basic": quickAction,
-    "listclearall": clearListAction
+let clearListTopAction = {
+    type: "io.streamroll.controller.listClearTop",
+    onKeyUp: function (context, settings, coordinates, userDesiredState) {
+        if (settings != null) {
+            let listUUID;
+        
+            if (settings["uuidState"] == "custom") {
+                listUUID = settings["diceUUID"];
+            } else {
+                listUUID = globalSettings["diceUUID"];
+            }
+
+            var url = `${DOMAIN}/listcleartop/${listUUID}`;
+            fetch(url, {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                }
+            }).then(response => {
+                console.log(response);
+
+                //get response code and alert if bad
+                let statusCode = response.status;
+
+                if (statusCode == 404) {
+                    showError(context);
+                } else if (statusCode == 500) {
+                    showError(context);
+                }
+            }).catch((reason) => {
+                console.log(reason);
+                showError(context);
+            });
+
+        } else {
+            showError(context);
+        }
+    }
 };
 
-let clearListTopAction = {};
+let keyUpActions = {
+    "basic": quickAction,
+    "listclearall": clearListAction,
+    "listcleartop": clearListTopAction
+};
+
 let globalSettings = undefined;
 
 function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, inInfo) {

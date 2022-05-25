@@ -19,25 +19,23 @@
             "Name": "Clear Last Rolled",
             "States": [
                 {
-                    "Image": "icons/pluginIcon",
+                    "Image": "icons/clearListTopIcon",
                     "TitleAlignment": "middle",
-                    "FontSize": "16",
-                    "Title": "Clear Last of List"
+                    "FontSize": "16"
                 }
             ],
             "SupportedInMultiActions": true,
             "Tooltip": "Want to remove the last roll off the top of the list? Push this!",
-            "UUID": "io.streamroll.controller.listClearLast"
+            "UUID": "io.streamroll.controller.listClearTop"
         },
         {
             "Icon": "icons/srio_list_clear",
             "Name": "Clear List",
             "States": [
                 {
-                    "Image": "icons/pluginIcon",
+                    "Image": "icons/clearListIcon",
                     "TitleAlignment": "middle",
-                    "FontSize": "16",
-                    "Title": "Clear List"
+                    "FontSize": "16"
                 }
             ],
             "SupportedInMultiActions": true,

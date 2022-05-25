@@ -154,8 +154,8 @@ function PI(inLanguage) {
         // Localize the fields
         document.getElementById('dice_setup_heading').innerHTML = instance.localization['DiceSetup'];
         document.getElementById('stateRdioLabel').innerHTML = instance.localization['Use'];
-        document.getElementById('rdio1Label').innerHTML = instance.localization['UUIDStatePreset'];
-        document.getElementById('rdio2Label').innerHTML = instance.localization['UUIDStateLocal'];
+        document.getElementById('rdio1Label').innerHTML = "<span></span>" + instance.localization['UUIDStatePreset'];
+        document.getElementById('rdio2Label').innerHTML = "<span></span>" + instance.localization['UUIDStateLocal'];
         document.getElementById('uuidLabel').innerHTML = instance.localization['DiceUUID'];
         document.getElementById('valueLabel').innerHTML = instance.localization['DiceRollValue'];
     };
