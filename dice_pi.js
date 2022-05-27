@@ -1,37 +1,3 @@
-function sendValueToPlugin(type) {
-    var payload = {};
-
-    if (type === "uuidUpdateState") {
-        //if state is global, replace field with global value
-        if (document.querySelector('input[name="uuidStateRadio"]:checked').value == "global") {
-            document.getElementById("dice_uuid").value = globalSettings.diceUUID;
-        } else {
-            document.getElementById("dice_uuid").value = settings.diceUUID;
-        }
-    } else if (type === "rollOptions") {
-        payload["rollOptions"] = document.getElementById("importInput").value.trim();
-        document.getElementById("importInput").value = "";
-    }
-
-    if (type === 'setQuickDice') {
-        payload["setQuickDice"] = document.getElementById("dice_roll_value").value;
-    } else if (pluginAction === "io.streamroll.controller.basic") {
-        payload["setQuickDice"] = document.getElementById("dice_roll_value").value || "3D6";
-    }
-
-    payload["setUUID"] = document.getElementById("dice_uuid").value;
-    payload["setUUIDState"] = document.querySelector('input[name="uuidStateRadio"]:checked').value
-
-    const json = {
-        "action": actionInfo['action'],
-        "event": "sendToPlugin",
-        "context": uuid,
-        "payload": payload
-    };
-
-    websocket.send(JSON.stringify(json));
-}
-
 let globalSettings = {};
 let settings = {};
 let actionInfo = {};
@@ -40,6 +6,8 @@ let pluginAction = undefined;
 let uuid;
 
 var workingUUID;
+
+//PI Funcs
 
 function loadInfoWindow() {
     //pop open a widnow to the website export info page
@@ -78,6 +46,44 @@ function importSettings() {
             alert("There is something wrong with the imported settings, please check and try again!");
         }
     }
+}
+
+// StreamDeck Funcs
+
+function sendValueToPlugin(type) {
+    var payload = {};
+
+    payload.settings = settings;
+
+    if (type === "uuidUpdateState") {
+        //if state is global, replace field with global value
+        if (document.querySelector('input[name="uuidStateRadio"]:checked').value == "global") {
+            document.getElementById("dice_uuid").value = globalSettings.diceUUID;
+        } else {
+            document.getElementById("dice_uuid").value = settings.diceUUID;
+        }
+    } else if (type === "rollOptions") {
+        payload["rollOptions"] = document.getElementById("importInput").value.trim();
+        document.getElementById("importInput").value = "";
+    }
+
+    if (type === 'setQuickDice') {
+        payload["setQuickDice"] = document.getElementById("dice_roll_value").value;
+    } else if (pluginAction === "io.streamroll.controller.basic") {
+        payload["setQuickDice"] = document.getElementById("dice_roll_value").value || "3D6";
+    }
+
+    payload["setUUID"] = document.getElementById("dice_uuid").value;
+    payload["setUUIDState"] = document.querySelector('input[name="uuidStateRadio"]:checked').value
+
+    const json = {
+        "action": actionInfo['action'],
+        "event": "sendToPlugin",
+        "context": uuid,
+        "payload": payload
+    };
+
+    websocket.send(JSON.stringify(json));
 }
 
 function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, inActionInfo) {
@@ -180,7 +186,6 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
         }
     };
 }
-
 
 function PI(inLanguage) {
     // Init PI

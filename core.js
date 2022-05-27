@@ -34,14 +34,36 @@ var quickAction = {
 
             diceValue = settings["diceValue"];
 
-            //might need to change this to POST
-            var url = `${DOMAIN}/roll/${diceUUID}/${diceValue}`;
+            let diceConfig = settings["rollOptions"] || {};
+
+            let url = `${DOMAIN}/roll/`;
+
+            let displayName = undefined; //TODO
+
+            let updatedRollEvents = {};
+            let rollEventKeys = Object.keys(diceConfig.rollEvents || {});
+
+            for (let i = 0; i < rollEventKeys.length; i++) {
+                //get object at key
+                let rollEventVal = diceConfig.rollEvents[rollEventKeys[i]];
+                //TODO EVENT ACTIONS NEED TO BE AN ARRAY, CURRENTLY BORKIN
+                updatedRollEvents[rollEventKeys[i]] = { eventTitle: rollEventVal.eventTitle, eventActions: diceConfig.rollEvents[rollEventKeys[i]].eventActions };
+            }
+
+            //send request to BE
             fetch(url, {
-                method: "GET",
+                method: "POST",
                 headers: {
                     "Accept": "application/json",
-                    "Content-Type": "application/json"
-                }
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    uuid: diceUUID,
+                    notation: diceValue,
+                    rollEvents: updatedRollEvents,
+                    listStyle: diceConfig.rollListStyle || {},
+                    roller: displayName || "Streamroller"
+                })
             }).then(response => {
                 //get response code and alert if bad
                 let statusCode = response.status;
@@ -199,6 +221,7 @@ function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, in
                 quickAction.onWillAppear(context, settings, coordinates);
             }
         } else if (event == "sendToPlugin") {
+
             if (jsonPayload.hasOwnProperty("setQuickDice")) {
                 settings.diceValue = jsonPayload.setQuickDice;
 
