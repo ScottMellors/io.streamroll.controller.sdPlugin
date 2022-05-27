@@ -11,6 +11,12 @@
 
 <body>
     <div class="sdpi-wrapper">
+        <div class="sdpi-item" id="dice_roll_item" style="display: none;">
+            <div class="sdpi-item-label" id="valueLabel">Dice Roll Value</div>
+            <input class="sdpi-item-value" id="dice_roll_value" value="3D6"
+                onchange="sendValueToPlugin('setQuickDice')">
+        </div>
+
         <div class="sdpi-item">
             <details class="sdpi-item-value">
                 <summary id="dice_setup_heading">Dice Setup</summary>
@@ -18,11 +24,13 @@
                     <div class="sdpi-item-label" id="stateRdioLabel">Use</div>
                     <div class="sdpi-item-value">
                         <span class="sdpi-item-child">
-                            <input id="rdio1" type="radio" value="global" name="uuidStateRadio" checked onclick="sendValueToPlugin('uuidUpdateState')">
+                            <input id="rdio1" type="radio" value="global" name="uuidStateRadio" checked
+                                onclick="sendValueToPlugin('uuidUpdateState')">
                             <label for="rdio1" class="sdpi-item-label" id="rdio1Label"><span></span>Preset</label>
                         </span>
                         <span class="sdpi-item-child">
-                            <input id="rdio2" type="radio" value="custom" name="uuidStateRadio" onclick="sendValueToPlugin('uuidUpdateState')">
+                            <input id="rdio2" type="radio" value="custom" name="uuidStateRadio"
+                                onclick="sendValueToPlugin('uuidUpdateState')">
                             <label for="rdio2" class="sdpi-item-label" id="rdio2Label"><span></span>Local UUID</label>
                         </span>
                     </div>
@@ -35,10 +43,30 @@
             </details>
         </div>
 
-        <div class="sdpi-item" id="dice_roll_item" style="display: none;">
-            <div class="sdpi-item-label" id="valueLabel">Dice Roll Value</div>
-            <input class="sdpi-item-value" id="dice_roll_value" value="3D6"
-                onchange="sendValueToPlugin('setQuickDice')">
+        <div class="sdpi-item" id="dice_roll_extras" style="display: none;">
+            <details class="sdpi-item-value">
+                <summary id="roll_options_heading">Roll Options</summary>
+                <div class="sdpi-item">
+                    <div class="sdpi-item-label" id="moreInfoLabel">More Info</div>
+                    <button class="sdpi-item-value" onclick="loadInfoWindow()" id="learnButton">Learn More</button>
+                </div>
+                <div class="sdpi-item">
+                    <div class="sdpi-item-label" id="currentStyleLabel">Current Style</div>
+                    <div class="sdpi-item-child">
+                        <span id="currentStyleCountLabel"># Item(s)</span>
+                    </div>
+                </div>
+
+                <div class="sdpi-item">
+                    <div class="sdpi-item-label" id="importLabel">Import String</div>
+                    <input class="sdpi-item-value" id="importInput" value="" placeholder="Exported String">
+                </div>
+                <div class="sdpi-item">
+                    <div class="sdpi-item-label" id="importActionLabel">Import</div>
+                    <button class="sdpi-item-value" id="importButton" onclick="importSettings()">Import
+                        Options</button>
+                </div>
+            </details>
         </div>
     </div>
 </body>

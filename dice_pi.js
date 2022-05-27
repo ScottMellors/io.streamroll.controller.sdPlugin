@@ -8,6 +8,9 @@ function sendValueToPlugin(type) {
         } else {
             document.getElementById("dice_uuid").value = settings.diceUUID;
         }
+    } else if (type === "rollOptions") {
+        payload["rollOptions"] = document.getElementById("importInput").value.trim();
+        document.getElementById("importInput").value = "";
     }
 
     if (type === 'setQuickDice') {
@@ -37,6 +40,45 @@ let pluginAction = undefined;
 let uuid;
 
 var workingUUID;
+
+function loadInfoWindow() {
+    //pop open a widnow to the website export info page
+    window.open("https://streamroll.io/export-info", "_blank");
+}
+
+function importSettings() {
+    //get input field
+    let inputFieldValue = document.getElementById("importInput").value.trim();
+
+    //alert if length == 0 || json doesnt validate?
+    if (inputFieldValue.length == 0) {
+        alert("Missing an import string, please enter one and try again!");
+    } else {
+        //save to local settings
+        try {
+            let config = JSON.parse(inputFieldValue);
+
+            let configCount = 0;
+            if (config.rollListStyle) {
+                configCount += 1;
+            }
+
+            if (config.rollEvents) {
+                configCount += Object.keys(config.rollEvents).length;
+            }
+
+            //update currentStyleLabel
+            document.getElementById("currentStyleCountLabel").innerHTML = instance.localization['StyleItemsLabel'].replace("{num}", configCount);
+
+            sendValueToPlugin('rollOptions');
+
+            //show success?
+            alert("Style Updated!");
+        } catch (e) {
+            alert("There is something wrong with the imported settings, please check and try again!");
+        }
+    }
+}
 
 function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, inActionInfo) {
     uuid = inUUID;
@@ -111,13 +153,29 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 
             if (pluginAction == "io.streamroll.controller.basic") {
                 document.getElementById("dice_roll_item").style.display = "flex";
-
+                document.getElementById("dice_roll_extras").style.display = "flex";
                 //load setting
                 var diceVal = jsonPayload.settings.diceValue || "3D6";
                 document.getElementById("dice_roll_value").value = diceVal;
+
+                let config = jsonPayload.settings.rollOptions || {};
+
+                let configCount = 0;
+                if (config.rollListStyle) {
+                    configCount += 1;
+                }
+
+                if (config.rollEvents) {
+                    configCount += Object.keys(config.rollEvents).length;
+                }
+
+                //update currentStyleLabel
+                document.getElementById("currentStyleCountLabel").innerHTML = instance.localization['StyleItemsLabel'].replace("{num}", configCount);
+
             } else {
                 //hide it
                 document.getElementById("dice_roll_item").style.display = "none";
+                document.getElementById("dice_roll_extras").style.display = "none";
             }
         }
     };
@@ -158,5 +216,15 @@ function PI(inLanguage) {
         document.getElementById('rdio2Label').innerHTML = "<span></span>" + instance.localization['UUIDStateLocal'];
         document.getElementById('uuidLabel').innerHTML = instance.localization['DiceUUID'];
         document.getElementById('valueLabel').innerHTML = instance.localization['DiceRollValue'];
+
+        //dice Options labels
+        document.getElementById('roll_options_heading').innerHTML = instance.localization['RollOptions'];
+        document.getElementById('moreInfoLabel').innerHTML = instance.localization['MoreInfo'];
+        document.getElementById('learnButton').innerHTML = instance.localization['LearnMore'];
+        document.getElementById('currentStyleLabel').innerHTML = instance.localization['CurrentStyle'];
+        document.getElementById('importLabel').innerHTML = instance.localization['ImportString'];
+        document.getElementById('importInput').placeholder = instance.localization['ExportedString']; //??
+        document.getElementById('importActionLabel').innerHTML = instance.localization['ImportLabel'];
+        document.getElementById('importButton').innerHTML = instance.localization['ImportOptions'];
     };
 }

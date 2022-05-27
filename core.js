@@ -74,7 +74,7 @@ let clearListAction = {
     onKeyUp: function (context, settings, coordinates, userDesiredState) {
         if (settings != null) {
             let listUUID;
-        
+
             if (settings["uuidState"] == "custom") {
                 listUUID = settings["diceUUID"];
             } else {
@@ -112,7 +112,7 @@ let clearListTopAction = {
     onKeyUp: function (context, settings, coordinates, userDesiredState) {
         if (settings != null) {
             let listUUID;
-        
+
             if (settings["uuidState"] == "custom") {
                 listUUID = settings["diceUUID"];
             } else {
@@ -204,6 +204,10 @@ function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, in
 
                 setTitle(context, jsonPayload.setQuickDice);
                 setSettings(context, settings);
+            }
+
+            if (jsonPayload.hasOwnProperty("rollOptions")) {
+                settings.rollOptions = JSON.parse(jsonPayload.rollOptions);
             }
 
             if (jsonPayload.hasOwnProperty("setUUID") && jsonPayload.hasOwnProperty("setUUIDState")) {

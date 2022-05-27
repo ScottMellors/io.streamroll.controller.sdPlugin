@@ -12,7 +12,16 @@
             "UUIDStatePreset" : "Preset",
             "UUIDStateLocal" : "Local UUID",
             "DiceUUID": "Dice UUID",
-            "DiceRollValue" : "Dice Roll Value"
+            "DiceRollValue" : "Dice Roll Value",
+            "RollOptions" : "Roll Options",
+            "MoreInfo" : "More Info",
+            "LearnMore": "Learn More",
+            "CurrentStyle": "Current Style",
+            "StyleItemsLabel": "{num} Item(s)",
+            "ImportString": "Import String",
+            "ExportedString": "Exported String",
+            "ImportLabel": "Import",
+            "ImportOptions": "Import Options"
         }
     }
 }
