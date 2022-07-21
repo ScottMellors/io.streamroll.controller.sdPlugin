@@ -170,7 +170,7 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 
                 let diceRollerName = jsonPayload.settings.displayName || "";
                 document.getElementById("rollerName").value = diceRollerName;
-                
+
                 let config = jsonPayload.settings.rollOptions || {};
 
                 let configCount = 0;
@@ -231,6 +231,10 @@ function PI(inLanguage) {
 
         //dice Options labels
         document.getElementById('roll_options_heading').innerHTML = instance.localization['RollOptions'];
+        document.getElementById('roll_style_heading').innerHTML = instance.localization['RollStyle'];
+        document.getElementById('roller_details_heading').innerHTML = instance.localization['RollerDetailsHeading'];
+        document.getElementById('roller_name_label').innerHTML = instance.localization['RollerNameLabel'];
+        document.getElementById('rollerName').placeholder = instance.localization['StreamRollerPlaceholder'];
         document.getElementById('moreInfoLabel').innerHTML = instance.localization['MoreInfo'];
         document.getElementById('learnButton').innerHTML = instance.localization['LearnMore'];
         document.getElementById('currentStyleLabel').innerHTML = instance.localization['CurrentStyle'];
