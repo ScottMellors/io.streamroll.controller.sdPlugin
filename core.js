@@ -1,8 +1,8 @@
 var websocket = null;
 var pluginUUID = null;
 
-let DOMAIN = "http://localhost:3000";
-//let DOMAIN = "https://streamroll.io";
+//let DOMAIN = "http://localhost:3000";
+let DOMAIN = "https://streamroll.io";
 
 var DestinationEnum = Object.freeze({
     "HARDWARE_AND_SOFTWARE": 0,
