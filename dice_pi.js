@@ -73,6 +73,10 @@ function sendValueToPlugin(type) {
         payload["setQuickDice"] = document.getElementById("dice_roll_value").value || "3D6";
     }
 
+    if (type === 'rollerNameUpdate') {
+        payload["rollerNameUpdate"] = document.getElementById("rollerName").value;
+    }
+
     payload["setUUID"] = document.getElementById("dice_uuid").value;
     payload["setUUIDState"] = document.querySelector('input[name="uuidStateRadio"]:checked').value
 
@@ -164,6 +168,9 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
                 var diceVal = jsonPayload.settings.diceValue || "3D6";
                 document.getElementById("dice_roll_value").value = diceVal;
 
+                let diceRollerName = jsonPayload.settings.displayName || "";
+                document.getElementById("rollerName").value = diceRollerName;
+                
                 let config = jsonPayload.settings.rollOptions || {};
 
                 let configCount = 0;

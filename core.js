@@ -38,7 +38,7 @@ var quickAction = {
 
             let url = `${DOMAIN}/roll/`;
 
-            let displayName = undefined; //TODO
+            let displayName = settings["displayName"] || "";
 
             let updatedRollEvents = {};
             let rollEventKeys = Object.keys(diceConfig.rollEvents || {});
@@ -226,11 +226,14 @@ function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, in
                 settings.diceValue = jsonPayload.setQuickDice;
 
                 setTitle(context, jsonPayload.setQuickDice);
-                setSettings(context, settings);
             }
 
             if (jsonPayload.hasOwnProperty("rollOptions")) {
                 settings.rollOptions = JSON.parse(jsonPayload.rollOptions);
+            }
+
+            if (jsonPayload.hasOwnProperty("rollerNameUpdate")) {
+                settings.displayName = jsonPayload.rollerNameUpdate;
             }
 
             if (jsonPayload.hasOwnProperty("setUUID") && jsonPayload.hasOwnProperty("setUUIDState")) {
@@ -244,10 +247,12 @@ function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, in
                     settings.diceUUID = uuid;
                 }
 
-                setSettings(context, settings);
+                //setSettings(context, settings);
                 saveGlobalSettings(pluginUUID, globalSettings);
                 setTitle(context, settings.diceValue || "");
             }
+
+            setSettings(context, settings);
 
         } else if (event == "didReceiveGlobalSettings") {
             globalSettings = jsonPayload.settings;

@@ -46,6 +46,12 @@
         <div class="sdpi-item" id="dice_roll_extras" style="display: none;">
             <details class="sdpi-item-value">
                 <summary id="roll_options_heading">Roll Options</summary>
+                <div class="sdpi-heading">Roller Details</div>
+                <div class="sdpi-item">
+                    <div class="sdpi-item-label">Roller Name</div>
+                    <input class="sdpi-item-value" id="rollerName" onchange="sendValueToPlugin('rollerNameUpdate')" value="" placeholder="StreamRoller">
+                </div>
+                <div class="sdpi-heading">Roll Style</div>
                 <div class="sdpi-item">
                     <div class="sdpi-item-label" id="moreInfoLabel">More Info</div>
                     <button class="sdpi-item-value" onclick="loadInfoWindow()" id="learnButton">Learn More</button>
@@ -56,7 +62,6 @@
                         <span id="currentStyleCountLabel"># Item(s)</span>
                     </div>
                 </div>
-
                 <div class="sdpi-item">
                     <div class="sdpi-item-label" id="importLabel">Import String</div>
                     <input class="sdpi-item-value" id="importInput" value="" placeholder="Exported String">
