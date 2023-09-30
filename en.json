@@ -9,8 +9,8 @@
         "PI": {
             "DiceSetup" : "Dice Setup",
             "Use": "Use",
-            "UUIDStatePreset" : "Preset",
-            "UUIDStateLocal" : "Local UUID",
+            "UUIDStatePreset" : "Default",
+            "UUIDStateLocal" : "One-off",
             "DiceUUID": "Dice UUID",
             "DiceRollValue" : "Dice Roll Value",
             "RollOptions" : "Roll Options",
@@ -25,7 +25,9 @@
             "ImportString": "Import String",
             "ExportedString": "Exported String",
             "ImportLabel": "Import",
-            "ImportOptions": "Import Options"
+            "ImportOptions": "Import Options",
+            "update": "Update",
+            "updateUUID": "Update UUID"
         }
     }
 }

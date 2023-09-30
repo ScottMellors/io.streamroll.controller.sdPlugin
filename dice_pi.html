@@ -24,21 +24,27 @@
                     <div class="sdpi-item-label" id="stateRdioLabel">Use</div>
                     <div class="sdpi-item-value">
                         <span class="sdpi-item-child">
-                            <input id="rdio1" type="radio" value="global" name="uuidStateRadio" checked
-                                onclick="sendValueToPlugin('uuidUpdateState')">
-                            <label for="rdio1" class="sdpi-item-label" id="rdio1Label"><span></span>Preset</label>
+                            <input id="stateRadioGlobal" type="radio" value="global" name="uuidStateRadio"
+                                onclick="toggleUUIDSettingChange('global')">
+                            <label for="stateRadioGlobal" class="sdpi-item-label"
+                                id="stateRadioGlobalLabel"><span></span>Default</label>
                         </span>
                         <span class="sdpi-item-child">
-                            <input id="rdio2" type="radio" value="custom" name="uuidStateRadio"
-                                onclick="sendValueToPlugin('uuidUpdateState')">
-                            <label for="rdio2" class="sdpi-item-label" id="rdio2Label"><span></span>Local UUID</label>
+                            <input id="stateRadioCustom" type="radio" value="custom" name="uuidStateRadio"
+                                onclick="toggleUUIDSettingChange('custom')">
+                            <label for="stateRadioCustom" class="sdpi-item-label"
+                                id="stateRadioCustomLabel"><span></span>One-off</label>
                         </span>
                     </div>
                 </div>
                 <div class="sdpi-item">
                     <div class="sdpi-item-label" id="uuidLabel">Dice UUID</div>
-                    <input class="sdpi-item-value" id="dice_uuid" type="text" value=""
-                        onchange="sendValueToPlugin('uuidUpdate')">
+                    <input class="sdpi-item-value" id="dice_uuid" type="text" value="" onchange="validateUUID()">
+                </div>
+                <div class="sdpi-item">
+                    <div class="sdpi-item-label" id="updateUUIDButtonLabel">Update</div>
+                    <button class="sdpi-item-value" onclick="sendValueToPlugin('uuidUpdate')" id="updateUUIDButton"
+                        disabled>Update UUID</button>
                 </div>
             </details>
         </div>
@@ -49,7 +55,8 @@
                 <div class="sdpi-heading" id="roller_details_heading">Roller Details</div>
                 <div class="sdpi-item">
                     <div class="sdpi-item-label" id="roller_name_label">Roller Name</div>
-                    <input class="sdpi-item-value" id="rollerName" onchange="sendValueToPlugin('rollerNameUpdate')" value="" placeholder="StreamRoller">
+                    <input class="sdpi-item-value" id="rollerName" onchange="sendValueToPlugin('rollerNameUpdate')"
+                        value="" placeholder="StreamRoller">
                 </div>
                 <div class="sdpi-heading" id="roll_style_heading">Roll Style</div>
                 <div class="sdpi-item">

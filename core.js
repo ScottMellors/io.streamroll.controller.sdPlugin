@@ -32,7 +32,7 @@ var quickAction = {
                 diceUUID = globalSettings["diceUUID"];
             }
 
-            diceValue = settings["diceValue"];
+            diceValue = settings["diceValue"] || "3D6";
 
             let diceConfig = settings["rollOptions"] || {};
 

@@ -5,7 +5,7 @@ let websocket = undefined;
 let pluginAction = undefined;
 let uuid;
 
-var workingUUID;
+let workingUUID;
 
 //PI Funcs
 
@@ -48,33 +48,53 @@ function importSettings() {
     }
 }
 
+function toggleUUIDSettingChange(uuidState) {
+    if (uuidState === "custom") {
+        document.getElementById("dice_uuid").value = settings.diceUUID || "";
+    } else {
+        document.getElementById("dice_uuid").value = globalSettings.diceUUID || "";
+    }
+
+    document.getElementById('updateUUIDButton').disabled = (settings.uuidState == uuidState);
+}
+
+function getCurrentUUIDValueChanged(newUUID) {
+    if (settings.uuidState === "custom") {
+        return settings.diceUUID != newUUID;
+    } else if (settings.uuidState === "global") {
+        return globalSettings.diceUUID != newUUID;
+    } else {
+        return false;
+    }
+}
+
+function validateUUID() {
+    let uuidConfButton = document.getElementById('updateUUIDButton');
+
+    //if current value is != store value based on environment setting
+    if (getCurrentUUIDValueChanged(document.getElementById('dice_uuid').value)) {
+        uuidConfButton.disabled = false;
+    } else {
+        uuidConfButton.disabled = true;
+    }
+}
+
 // StreamDeck Funcs
 
 function sendValueToPlugin(type) {
-    var payload = {};
+    let payload = {};
 
     payload.settings = settings;
 
-    if (type === "uuidUpdateState") {
-        //if state is global, replace field with global value
-        if (document.querySelector('input[name="uuidStateRadio"]:checked').value == "global") {
-            document.getElementById("dice_uuid").value = globalSettings.diceUUID;
-        } else {
-            document.getElementById("dice_uuid").value = settings.diceUUID;
-        }
-    } else if (type === "rollOptions") {
+    if (type === "rollOptions") {
         payload["rollOptions"] = document.getElementById("importInput").value.trim();
         document.getElementById("importInput").value = "";
-    }
-
-    if (type === 'setQuickDice') {
+    } else if (type === 'rollerNameUpdate') {
+        payload["rollerNameUpdate"] = document.getElementById("rollerName").value;
+    } else if (type === 'setQuickDice') {
         payload["setQuickDice"] = document.getElementById("dice_roll_value").value;
     } else if (pluginAction === "io.streamroll.controller.basic") {
         payload["setQuickDice"] = document.getElementById("dice_roll_value").value || "3D6";
-    }
-
-    if (type === 'rollerNameUpdate') {
-        payload["rollerNameUpdate"] = document.getElementById("rollerName").value;
     }
 
     payload["setUUID"] = document.getElementById("dice_uuid").value;
@@ -97,10 +117,10 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
     actionInfo = JSON.parse(inActionInfo); // cache the info
     websocket = new WebSocket('ws://localhost:' + inPort);
 
-    var info = JSON.parse(inInfo);
+    let info = JSON.parse(inInfo);
 
     // Retrieve language
-    var language = info['application']['language'];
+    let language = info['application']['language'];
 
     PI(language);
 
@@ -131,13 +151,7 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
         if (event === "didReceiveGlobalSettings") {
             globalSettings = jsonPayload.settings;
 
-            var workingUUID = globalSettings.diceUUID;
-
-            //load settings
-            document.getElementById('dice_uuid').value = workingUUID;
-
             //do get local settings
-
             let settingsJson = {
                 'event': 'getSettings',
                 'context': uuid
@@ -146,16 +160,20 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
             websocket.send(JSON.stringify(settingsJson));
 
         } else if (event === "didReceiveSettings") {
+            document.getElementById('updateUUIDButton').disabled = true;
+
             pluginAction = subJsonObj.action;
             settings = jsonPayload.settings;
 
-            var workingUUID = undefined;
+            let workingUUID = undefined;
 
-            if (jsonPayload.settings.uuidState == "local") {
-
-                document.getElementById("rdio2").checked = true;
-                workingUUID = jsonPayload.settings.diceUUID || undefined;
+            if (settings.uuidState == "custom") {
+                document.getElementById("stateRadioGlobal").checked = false;
+                document.getElementById("stateRadioCustom").checked = true;
+                workingUUID = settings.diceUUID || undefined;
             } else {
+                document.getElementById("stateRadioCustom").checked = false;
+                document.getElementById("stateRadioGlobal").checked = true;
                 workingUUID = globalSettings.diceUUID || undefined;
             }
 
@@ -165,13 +183,13 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
                 document.getElementById("dice_roll_item").style.display = "flex";
                 document.getElementById("dice_roll_extras").style.display = "flex";
                 //load setting
-                var diceVal = jsonPayload.settings.diceValue || "3D6";
+                let diceVal = settings.diceValue || "3D6";
                 document.getElementById("dice_roll_value").value = diceVal;
 
-                let diceRollerName = jsonPayload.settings.displayName || "";
+                let diceRollerName = settings.displayName || "";
                 document.getElementById("rollerName").value = diceRollerName;
 
-                let config = jsonPayload.settings.rollOptions || {};
+                let config = settings.rollOptions || {};
 
                 let configCount = 0;
                 if (config.rollListStyle) {
@@ -224,10 +242,12 @@ function PI(inLanguage) {
         // Localize the fields
         document.getElementById('dice_setup_heading').innerHTML = instance.localization['DiceSetup'];
         document.getElementById('stateRdioLabel').innerHTML = instance.localization['Use'];
-        document.getElementById('rdio1Label').innerHTML = "<span></span>" + instance.localization['UUIDStatePreset'];
-        document.getElementById('rdio2Label').innerHTML = "<span></span>" + instance.localization['UUIDStateLocal'];
+        document.getElementById('stateRadioGlobalLabel').innerHTML = "<span></span>" + instance.localization['UUIDStatePreset'];
+        document.getElementById('stateRadioCustomLabel').innerHTML = "<span></span>" + instance.localization['UUIDStateLocal'];
         document.getElementById('uuidLabel').innerHTML = instance.localization['DiceUUID'];
         document.getElementById('valueLabel').innerHTML = instance.localization['DiceRollValue'];
+        document.getElementById('updateUUIDButtonLabel').innerHTML = instance.localization['update'];
+        document.getElementById('updateUUIDButton').innerHTML = instance.localization['updateUUID'];
 
         //dice Options labels
         document.getElementById('roll_options_heading').innerHTML = instance.localization['RollOptions'];
